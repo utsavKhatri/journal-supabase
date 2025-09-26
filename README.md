@@ -1,7 +1,7 @@
 # ✨ Mindful Moments - A Gratitude Journaling App
 
 <p align="center">
-  <img alt="Mindful Moments Application Screenshot" src="/homepage.png" width="700"/>
+  <img alt="Mindful Moments Application Screenshot" src="https://cdn.jsdelivr.net/gh/utsavKhatri/journal-supabase@main/public/homepage.png" width="700"/>
   <br/>
   <i>A beautiful and intuitive app to cultivate gratitude and mindfulness.</i>
 </p>
@@ -30,7 +30,7 @@ Mindful Moments is a modern, full-stack journaling application designed to help 
 - **🗑️ Account Deletion:** Securely delete your account and all associated data.
 
 <p align="center">
-  <img alt="Mindful Moments Insight Page Screenshot" src="/insight.png" width="700"/>
+  <img alt="Mindful Moments Insight Page Screenshot" src="https://cdn.jsdelivr.net/gh/utsavKhatri/journal-supabase@main/public/insight.png" width="700"/>
   <br/>
   <i>Gain insights into your emotional well-being with our analytics dashboard.</i>
 </p>
@@ -56,22 +56,26 @@ To get a local copy up and running, follow these simple steps.
 ### Installation
 
 1.  **Clone the repository:**
+
     ```sh
     git clone https://github.com/your-username/journal-supabase.git
     cd journal-supabase
     ```
 
 2.  **Install dependencies:**
+
     ```sh
     bun install
     ```
 
 3.  **Set up environment variables:**
     Create a `.env.local` file in the root of your project and add your Supabase project URL and anon key:
+
     ```env
     NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY=your-supabase-anon-key
     ```
+
     You can find these in your Supabase project's API settings.
 
 4.  **Run the development server:**
