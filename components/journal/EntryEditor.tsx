@@ -111,7 +111,7 @@ export function EntryEditor({
         placeholder="Write something beautiful..."
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="max-h-[50dvh] w-full rounded-l-sm rounded-r-none border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:shadow-md focus-visible:shadow-accent disabled:cursor-not-allowed disabled:opacity-50"
+        className="max-h-[50dvh] journal-entry w-full rounded-l-sm rounded-r-none border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:shadow-md focus-visible:shadow-accent disabled:cursor-not-allowed disabled:opacity-50"
       />
       <div>
         <p className="text-sm font-medium mb-2">How are you feeling?</p>

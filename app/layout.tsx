@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Kalam } from "next/font/google";
+import { Kalam, Open_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/layout/Header";
 import "./globals.css";
@@ -15,10 +15,16 @@ export const metadata: Metadata = {
 };
 
 // Initializes the Kalam font for use throughout the application.
-const kalamFont = Kalam({
+const openSans = Open_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: "400",
+});
+
+const kalam = Kalam({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["300", "400", "700"],
 });
 
 /**
@@ -34,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${kalamFont.className} antialiased`}>
+      <body className={`${openSans.className} ${kalam.variable} antialiased`}>
         {/* ThemeProvider handles the application's light and dark modes. */}
         <ThemeProvider
           attribute="class"

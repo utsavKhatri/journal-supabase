@@ -70,7 +70,9 @@ export default async function EntryDetailPage({
           </CardHeader>
           <CardContent>
             {/* Displays the main content of the journal entry, preserving whitespace. */}
-            <p className="whitespace-pre-wrap text-lg">{entry.content}</p>
+            <p className="whitespace-pre-wrap text-lg journal-entry">
+              {entry.content}
+            </p>
           </CardContent>
         </Card>
       </div>

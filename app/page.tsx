@@ -107,7 +107,7 @@ export default async function Home(props: HomeProps) {
                     <CardContent className="flex-1 overflow-hidden">
                       <p
                         className={cn(
-                          "text-muted-foreground leading-relaxed",
+                          "text-muted-foreground leading-relaxed journal-entry",
                           getTextClamp(pattern)
                         )}
                       >

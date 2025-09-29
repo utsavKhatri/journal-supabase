@@ -37,7 +37,7 @@ export function Header() {
           <div className="flex items-center space-x-3 min-w-0 flex-1 ">
             <Link
               href="/"
-              className="text-lg font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent hover:from-primary hover:to-secondary transition-colors"
+              className="text-lg font-bold text-foreground hover:text-primary transition-colors duration-300"
             >
               Mindful Moments
             </Link>
@@ -99,7 +99,7 @@ export function Header() {
 
       {/* Mobile navigation menu */}
       {mobileOpen && (
-        <div className="lg:hidden mt-2 container mx-auto px-4">
+        <div className="lg:hidden mt-2 container mx-auto px-4 absolute left-0 right-0">
           <nav className="flex flex-col rounded-2xl bg-background/80 backdrop-blur-md border border-border/50 shadow p-2 space-y-2">
             {/* Navigation items */}
             {navItems.map((item) => (
