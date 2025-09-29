@@ -8,10 +8,16 @@ type props = {
   className?: string;
 };
 
+/**
+ * The ThemeToggle component provides a button for switching between light and dark themes.
+ * It persists the user's choice in localStorage and sets the initial theme based on
+ * either the stored preference or the user's system settings.
+ */
 export const ThemeToggle = ({ className }: props) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
+  // On component mount, set the theme based on localStorage or system preference.
   useEffect(() => {
     const stored = localStorage.getItem("theme");
     if (stored === "dark") {
@@ -29,6 +35,9 @@ export const ThemeToggle = ({ className }: props) => {
     setIsDarkMode(isDark);
   }, []);
 
+  /**
+   * Toggles the theme between light and dark mode and saves the preference to localStorage.
+   */
   const changeTheme = () => {
     if (!buttonRef.current) return;
     const dark = document.documentElement.classList.toggle("dark");
@@ -45,7 +54,7 @@ export const ThemeToggle = ({ className }: props) => {
       aria-label={isDarkMode ? "Switch to light theme" : "Switch to dark theme"}
       title={isDarkMode ? "Switch to light theme" : "Switch to dark theme"}
     >
-      {isDarkMode ? <SunDim /> : <Moon />}
+      {isDarkMode ? <SunDim className="size-5" /> : <Moon className="size-5" />}
     </button>
   );
 };

@@ -13,17 +13,24 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
+/**
+ * The EntryDetailPage component is responsible for fetching and displaying a single journal entry.
+ * It retrieves the entry ID from the URL parameters, fetches the corresponding data from Supabase,
+ * and renders it in a card format. It also includes options to edit or delete the entry.
+ */
 export default async function EntryDetailPage({
   params,
 }: PageProps<"/journal/[id]">) {
   const supabase = await createClient();
 
+  // Fetches a single journal entry from the database using the ID from the URL params.
   const { data: entry, error } = await supabase
     .from("entries")
     .select("id, date, mood, content, created_at")
     .eq("id", (await params).id)
     .single();
 
+  // If the entry is not found or an error occurs, redirect the user to the homepage.
   if (error || !entry) {
     redirect("/");
   }
@@ -32,12 +39,14 @@ export default async function EntryDetailPage({
     <div className="flex-1 w-full flex flex-col gap-8 items-center">
       <div className="w-full max-w-2xl px-4 md:px-0">
         <div className="flex justify-between items-center mb-4">
+          {/* Navigation button to go back to the main journal page. */}
           <Button asChild variant="outline">
             <Link href="/">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Journal
             </Link>
           </Button>
+          {/* Action buttons for editing and deleting the entry. */}
           <div className="flex gap-2">
             <EditEntryForm entry={entry} />
             <DeleteEntryButton entryId={entry.id} />
@@ -46,6 +55,7 @@ export default async function EntryDetailPage({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
+              {/* Displays the mood and formatted date of the journal entry. */}
               <span>{entry.mood}</span>
               <span>
                 {new Date(entry.date).toLocaleDateString("en-US", {
@@ -59,6 +69,7 @@ export default async function EntryDetailPage({
             <CardDescription>Your mindful moment</CardDescription>
           </CardHeader>
           <CardContent>
+            {/* Displays the main content of the journal entry, preserving whitespace. */}
             <p className="whitespace-pre-wrap text-lg">{entry.content}</p>
           </CardContent>
         </Card>

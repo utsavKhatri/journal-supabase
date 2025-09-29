@@ -1,6 +1,10 @@
 import React from "react";
 import Link from "next/link";
 
+/**
+ * A component to be displayed when the journal page or its entries are not found.
+ * It provides a user-friendly message and a link to navigate to the main journal page.
+ */
 export default function JournalNotFound() {
   return (
     <div className="flex flex-1 items-center justify-center p-6">

@@ -17,27 +17,40 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+/**
+ * The AuthButton component handles the display of authentication-related actions.
+ * It shows "Sign in" and "Sign up" buttons for unauthenticated users.
+ * For authenticated users, it displays an avatar with a dropdown menu that includes the user's email and a "Log out" option.
+ */
 export function AuthButton() {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const supabase = createClient();
+
+    // Subscribes to authentication state changes to keep the UI in sync.
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
 
+    // Fetches the initial user data on component mount.
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user ?? null);
     });
 
+    // Unsubscribes from the auth state change listener when the component unmounts.
     return () => {
       subscription?.unsubscribe();
     };
   }, []);
 
+  /**
+   * Handles the user logout process.
+   * It signs the user out using Supabase, then redirects to the login page.
+   */
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -45,11 +58,15 @@ export function AuthButton() {
     router.refresh();
   };
 
+  /**
+   * Generates initials from the user's email to be used as a fallback for the avatar.
+   */
   const getInitials = (email: string) => {
     return email ? email.slice(0, 2).toUpperCase() : "?";
   };
 
   return user ? (
+    // If the user is authenticated, display the user avatar and dropdown menu.
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-lg">
@@ -76,6 +93,7 @@ export function AuthButton() {
       </DropdownMenuContent>
     </DropdownMenu>
   ) : (
+    // If the user is not authenticated, display sign-in and sign-up buttons.
     <div className="flex gap-2">
       <Button asChild size="sm" variant={"outline"}>
         <Link href="/auth/login">Sign in</Link>

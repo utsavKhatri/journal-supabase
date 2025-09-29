@@ -1,6 +1,10 @@
 import React from "react";
 import Link from "next/link";
 
+/**
+ * A component to be displayed when the settings page is not found.
+ * It provides a user-friendly message and a link to navigate back to the homepage.
+ */
 export default function SettingsNotFound() {
   return (
     <div className="flex flex-1 items-center justify-center p-6">

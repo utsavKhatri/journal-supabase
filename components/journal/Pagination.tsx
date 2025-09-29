@@ -8,47 +8,56 @@ import { cn } from "@/lib/utils";
 interface PaginationProps {
   totalPages: number;
   currentPage?: number;
-  totalItems: number | null;
-  itemsPerPage?: number;
 }
 
-export function Pagination({
-  totalPages,
-  currentPage = 1,
-  totalItems,
-  itemsPerPage,
-}: PaginationProps) {
+/**
+ * The Pagination component provides a set of controls for navigating through paginated content.
+ * It displays page numbers, previous/next buttons, and uses ellipses for large page ranges
+ * to maintain a clean and user-friendly interface.
+ */
+export function Pagination({ totalPages, currentPage = 1 }: PaginationProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  /**
+   * Creates a URL for a specific page number by updating the 'page' search parameter.
+   */
   const createPageURL = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
     return `?${params.toString()}`;
   };
 
+  /**
+   * Navigates to the specified page number if it is within the valid range.
+   */
   const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {
       router.push(createPageURL(page));
     }
   };
 
-  // Generate page numbers to show
+  /**
+   * Generates the list of page numbers to display in the pagination control.
+   * For a small number of pages, it shows all page numbers.
+   * For a larger number, it uses ellipses to shorten the list, keeping the current page
+   * and its immediate neighbors visible.
+   */
   const getPageNumbers = () => {
     const pages: (number | "ellipsis")[] = [];
     const showEllipsis = totalPages > 7;
 
     if (!showEllipsis) {
-      // Show all pages if 7 or fewer
+      // Show all pages if there are 7 or fewer.
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Always show first page
+      // Always show the first page.
       pages.push(1);
 
       if (currentPage <= 4) {
-        // Show pages 2-5 and ellipsis
+        // Show pages 2-5 and an ellipsis if near the beginning.
         for (let i = 2; i <= Math.min(5, totalPages - 1); i++) {
           pages.push(i);
         }
@@ -56,13 +65,13 @@ export function Pagination({
           pages.push("ellipsis");
         }
       } else if (currentPage >= totalPages - 3) {
-        // Show ellipsis and last 4 pages
+        // Show an ellipsis and the last 4 pages if near the end.
         pages.push("ellipsis");
         for (let i = Math.max(2, totalPages - 4); i <= totalPages - 1; i++) {
           pages.push(i);
         }
       } else {
-        // Show ellipsis, current page area, ellipsis
+        // Show an ellipsis, the current page and its neighbors, and another ellipsis for middle pages.
         pages.push("ellipsis");
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pages.push(i);
@@ -70,7 +79,7 @@ export function Pagination({
         pages.push("ellipsis");
       }
 
-      // Always show last page (if it's not already included)
+      // Always show the last page if it's not already included.
       if (totalPages > 1 && pages[pages.length - 1] !== totalPages) {
         pages.push(totalPages);
       }
@@ -86,7 +95,6 @@ export function Pagination({
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center gap-1">
-        {/* Previous Button */}
         <Button
           variant="outline"
           size="sm"
@@ -97,7 +105,6 @@ export function Pagination({
           <ChevronLeft className="h-4 w-4" />
         </Button>
 
-        {/* Page Numbers */}
         {pageNumbers.map((page, index) =>
           page === "ellipsis" ? (
             <div
@@ -122,7 +129,6 @@ export function Pagination({
           )
         )}
 
-        {/* Next Button */}
         <Button
           variant="outline"
           size="sm"
@@ -133,13 +139,6 @@ export function Pagination({
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
-
-      {/* Optional: Page info */}
-      {totalItems && itemsPerPage && (
-        <p className="text-sm text-muted-foreground">
-          Page {currentPage} of {totalPages}
-        </p>
-      )}
     </div>
   );
 }

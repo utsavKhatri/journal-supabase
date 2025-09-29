@@ -6,8 +6,7 @@ import SearchForm from "@/components/journal/SearchForm";
 import Link from "next/link";
 import { Pagination } from "@/components/journal/Pagination";
 import { cn, getBentoPattern, getTextClamp } from "@/lib/utils";
-import { startOfMonth, endOfMonth, format } from "date-fns";
-import { User } from "@supabase/supabase-js";
+import { getJournalEntries } from "@/lib/dal";
 
 interface HomeProps {
   searchParams?: Promise<{
@@ -18,6 +17,12 @@ interface HomeProps {
   }>;
 }
 
+/**
+ * The Home page component serves as the main dashboard for the journal.
+ * It displays a list of journal entries in a bento-style grid, provides
+ * search and pagination functionality, and prompts the user to create an entry
+ * if none exist.
+ */
 export default async function Home(props: HomeProps) {
   const searchParams = await props.searchParams;
   const supabase = await createClient();
@@ -29,6 +34,7 @@ export default async function Home(props: HomeProps) {
 
   if (userError || !user) redirect("/auth/login");
 
+  // Fetches journal entries with pagination, filtering, and search.
   const { entries, totalCount, totalPages, page, itemsPerPage, month, year } =
     await getJournalEntries({ user, searchParams });
 
@@ -37,13 +43,17 @@ export default async function Home(props: HomeProps) {
   return (
     <>
       <header
-        className={cn("mb-8 flex items-center justify-between w-full", {
-          "justify-end": !totalCount,
-        })}
+        className={cn(
+          "mb-8 flex items-center justify-between w-full max-sm:flex-col max-sm:px-3 gap-3",
+          {
+            "justify-end": !totalCount,
+          }
+        )}
       >
         <div>
+          {/* Display the total number of entries for the selected month and year. */}
           {totalCount ? (
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1 text-nowrap">
               {totalCount} entries for{" "}
               {new Date(year, month).toLocaleDateString("en-US", {
                 month: "long",
@@ -53,16 +63,17 @@ export default async function Home(props: HomeProps) {
           ) : null}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 max-sm:items-center w-full max-sm:flex-col-reverse">
           <SearchForm initialQuery={q} />
           <NewEntryForm />
         </div>
       </header>
 
-      <main className="flex flex-col gap-8">
+      <main className="flex flex-col gap-8 w-full">
         {entries && entries.length > 0 ? (
           <>
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[160px] grid-flow-dense">
+            {/* Display the journal entries in a responsive, bento-style grid. */}
+            <div className=" grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[160px] grid-flow-dense">
               {entries.map((entry, i) => {
                 const pattern = getBentoPattern(i, totalCount || 12);
                 return (
@@ -70,7 +81,7 @@ export default async function Home(props: HomeProps) {
                     href={`/journal/${entry.id}`}
                     key={entry.id}
                     className={cn(
-                      "bg-card text-card-foreground gap-6 rounded-xl py-6 shadow-sm group h-full flex flex-col overflow-hidden border hover:border-primary transition duration-300",
+                      "bg-card text-card-foreground gap-3 rounded-xl py-4 shadow-sm group h-full flex flex-col overflow-hidden border hover:border-primary transition duration-300",
                       pattern
                     )}
                   >
@@ -108,14 +119,10 @@ export default async function Home(props: HomeProps) {
               })}
             </div>
 
+            {/* Render pagination controls if there is more than one page of entries. */}
             {totalPages > 1 && (
               <div className="flex flex-col items-center gap-4">
-                <Pagination
-                  totalPages={totalPages}
-                  currentPage={page}
-                  totalItems={totalCount}
-                  itemsPerPage={itemsPerPage}
-                />
+                <Pagination totalPages={totalPages} currentPage={page} />
                 <div className="text-sm text-muted-foreground">
                   Showing {(page - 1) * itemsPerPage + 1} to{" "}
                   {Math.min(page * itemsPerPage, totalCount || 0)} of{" "}
@@ -125,6 +132,7 @@ export default async function Home(props: HomeProps) {
             )}
           </>
         ) : (
+          // Display a prompt to create a new entry if none exist.
           <div className="text-center py-16 rounded-lg flex flex-col items-center justify-center w-full max-w-2xl mx-auto px-2">
             <div className="text-6xl mb-4">📝</div>
             <h3 className="text-lg font-semibold mb-2">No entries yet</h3>
@@ -139,78 +147,3 @@ export default async function Home(props: HomeProps) {
     </>
   );
 }
-
-/**
- * Fetches journal entries for a user with pagination, filtering by month/year, and search query.
- */
-const getJournalEntries = async ({
-  user,
-  searchParams,
-}: {
-  user: User;
-  searchParams:
-    | {
-        page?: string | undefined;
-        month?: string | undefined;
-        year?: string | undefined;
-        q?: string | undefined;
-      }
-    | undefined;
-}) => {
-  const supabase = await createClient();
-  const now = new Date();
-  const pageNum = parseInt(searchParams?.page ?? "", 10);
-  const page = Number.isNaN(pageNum) || pageNum < 1 ? 1 : pageNum;
-  const itemsPerPage = 7;
-
-  const monthNum = parseInt(searchParams?.month ?? "", 10);
-  const yearNum = parseInt(searchParams?.year ?? "", 10);
-  const month = Number.isNaN(monthNum)
-    ? now.getMonth()
-    : Math.max(0, Math.min(11, monthNum));
-  const year = Number.isNaN(yearNum) ? now.getFullYear() : yearNum;
-
-  const monthStart = startOfMonth(new Date(year, month));
-  const monthEnd = endOfMonth(monthStart);
-  const startDate = format(monthStart, "yyyy-MM-dd");
-  const endDate = format(monthEnd, "yyyy-MM-dd");
-
-  const q = (searchParams?.q ?? "").trim();
-  const hasQuery = q.length > 0;
-
-  const countQuery = supabase
-    .from("entries")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", user.id)
-    .gte("date", startDate)
-    .lte("date", endDate);
-
-  if (hasQuery) {
-    countQuery.or(`content.ilike.%${q}%,mood.ilike.%${q}%`);
-  }
-
-  const { count: totalCount, error: countError } = await countQuery;
-
-  if (countError) throw countError;
-
-  const dataQuery = supabase
-    .from("entries")
-    .select("id, date, mood, content, created_at")
-    .eq("user_id", user.id)
-    .gte("date", startDate)
-    .lte("date", endDate);
-
-  if (hasQuery) {
-    dataQuery.or(`content.ilike.%${q}%,mood.ilike.%${q}%`);
-  }
-
-  const { data: entries, error: entriesError } = await dataQuery
-    .order("date", { ascending: false })
-    .range((page - 1) * itemsPerPage, page * itemsPerPage - 1);
-
-  if (entriesError) throw entriesError;
-
-  const totalPages = totalCount ? Math.ceil(totalCount / itemsPerPage) : 0;
-
-  return { entries, totalCount, totalPages, page, itemsPerPage, month, year };
-};

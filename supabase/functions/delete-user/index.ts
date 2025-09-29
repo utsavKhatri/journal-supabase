@@ -1,62 +1,57 @@
-// @ts-nocheck
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.5";
 
-serve(async (req) => {
+Deno.serve(async (req) => {
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+  };
+
   if (req.method === "OPTIONS") {
-    return new Response("ok", {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "authorization, x-client-info, apikey",
-      },
-    });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-      {
-        global: {
-          headers: { Authorization: req.headers.get("Authorization")! },
-        },
-      },
-    );
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const authHeader = req.headers.get("Authorization");
+    const jwt = authHeader?.split(" ")[1];
+    if (!jwt) throw new Error("Missing Authorization token");
+
+    const userClient = createClient(supabaseUrl, anonKey);
+    const adminClient = createClient(supabaseUrl, serviceKey);
 
     const {
       data: { user },
-    } = await supabase.auth.getUser();
+      error: userError,
+    } = await userClient.auth.getUser(jwt);
+    if (userError) throw userError;
+    if (!user) throw new Error("User not found");
 
-    if (!user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    const { error: dataDeleteErr } = await adminClient
+      .from("entries")
+      .delete()
+      .eq("user_id", user.id);
+    if (dataDeleteErr) throw dataDeleteErr;
 
-    const adminAuthClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    const { error: userDeleteErr } = await adminClient.auth.admin.deleteUser(
+      user.id
     );
+    if (userDeleteErr) throw userDeleteErr;
 
-    // First, delete user data from other tables
-    await adminAuthClient.from("entries").delete().eq("user_id", user.id);
-
-    // Then, delete the user from auth.users
-    const { error } = await adminAuthClient.auth.admin.deleteUser(user.id);
-
-    if (error) {
-      throw error;
-    }
-
-    return new Response(JSON.stringify({ message: "User deleted" }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ message: "Account deleted successfully" }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      }
+    );
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
+    return new Response(JSON.stringify(error), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 400,
     });
   }
 });

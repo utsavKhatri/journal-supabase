@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "@/components/ui/button";
+import { saveEntry } from "@/lib/dal.client";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { Entry } from "@/lib/types";
@@ -14,6 +15,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
+// Predefined moods for the user to select from.
 const moods = [
   { emoji: "😊", name: "Happy" },
   { emoji: "🧘", name: "Calm" },
@@ -22,6 +24,12 @@ const moods = [
   { emoji: "🤔", name: "Thoughtful" },
 ];
 
+/**
+ * The EntryEditor component is a versatile form for both creating and editing journal entries.
+ * When an `entry` prop is provided, it populates the form with the existing data for editing.
+ * Otherwise, it presents a blank form for creating a new entry.
+ * It handles state for content, mood, and date, and communicates with Supabase to save changes.
+ */
 export function EntryEditor({
   entry,
   onSave,
@@ -37,9 +45,10 @@ export function EntryEditor({
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  // If an entry is provided for editing, populate the form fields with its data.
   useEffect(() => {
-    if (entry && entry.content) {
-      setContent(entry.content);
+    if (entry) {
+      setContent(entry.content ?? "");
       setMood(entry.mood);
       setDate(new Date(entry.date));
       const isStandardMood = moods.some((m) => m.emoji === entry.mood);
@@ -47,13 +56,17 @@ export function EntryEditor({
         setIsCustomMood(true);
       }
     }
-  }, [entry]);
+  }, [entry?.content, entry?.mood, entry?.date]);
 
+  /**
+   * Handles saving the journal entry, either by creating a new one or updating an existing one.
+   * It validates user authentication, then sends the data to Supabase.
+   */
   const handleSave = async () => {
     setIsLoading(true);
     setError(null);
-    const supabase = createClient();
 
+    const supabase = createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -64,44 +77,27 @@ export function EntryEditor({
     }
 
     try {
-      let error;
-      if (entry) {
-        // Update existing entry
-        const { error: updateError } = await supabase
-          .from("entries")
-          .update({
-            content,
-            mood,
-            date: date?.toISOString(),
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", entry.id);
-        error = updateError;
-      } else {
-        // Create new entry
-        const { error: insertError } = await supabase.from("entries").insert({
-          content,
-          mood,
-          date: date?.toISOString(),
-          user_id: user.id,
-        });
-        error = insertError;
-      }
+      await saveEntry({
+        content,
+        mood,
+        date,
+        entry,
+        userId: user.id,
+      });
 
-      if (error) throw error;
-
+      // If an onSave callback is provided, call it. Otherwise, clear the form for new entries.
       if (onSave) {
         onSave();
       } else {
-        // Clear the form for new entries
         setContent("");
         setMood(null);
         setDate(new Date());
         setIsCustomMood(false);
       }
-      // Refresh the page to show the new/updated entry
+      // Refresh the page to reflect the changes.
       router.refresh();
     } catch (error: unknown) {
+      console.error("Error saving entry:", error);
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setIsLoading(false);
@@ -120,6 +116,7 @@ export function EntryEditor({
       <div>
         <p className="text-sm font-medium mb-2">How are you feeling?</p>
         <div className="flex flex-wrap gap-2">
+          {/* Render buttons for each predefined mood. */}
           {moods.map((m) => (
             <Button
               key={m.emoji}
@@ -137,6 +134,7 @@ export function EntryEditor({
               {m.name}
             </Button>
           ))}
+          {/* Show an "Other" button to allow for custom mood input when creating a new entry. */}
           {!entry && (
             <Button
               variant={isCustomMood ? "default" : "outline"}
@@ -160,6 +158,7 @@ export function EntryEditor({
           />
         )}
       </div>
+      {/* When creating a new entry, allow the date to be changed via a popover calendar. */}
       {!entry ? (
         <details>
           <summary className="text-sm cursor-pointer">More settings</summary>
@@ -189,6 +188,7 @@ export function EntryEditor({
           </div>
         </details>
       ) : (
+        // When editing, display the date as a read-only field with a tooltip.
         <div className="grid gap-2 pt-2 w-fit">
           <Tooltip>
             <TooltipTrigger>
@@ -203,7 +203,7 @@ export function EntryEditor({
             </TooltipTrigger>
 
             <TooltipContent side="top">
-              <p>journal entry date and cannot be changed while editing.</p>
+              <p>The journal entry date cannot be changed while editing.</p>
             </TooltipContent>
           </Tooltip>
         </div>

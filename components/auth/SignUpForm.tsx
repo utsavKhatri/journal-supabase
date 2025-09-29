@@ -16,6 +16,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+/**
+ * The SignUpForm component provides a form for new users to create an account.
+ * It captures the user's email and password, communicates with Supabase for registration,
+ * and redirects to a success page upon successful sign-up.
+ */
 export function SignUpForm({
   className,
   ...props
@@ -26,6 +31,11 @@ export function SignUpForm({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  /**
+   * Handles the submission of the sign-up form.
+   * It attempts to create a new user account using Supabase auth.
+   * On success, it redirects the user to a page indicating that a confirmation email has been sent.
+   */
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
@@ -49,8 +59,6 @@ export function SignUpForm({
       setIsLoading(false);
     }
   };
-
-  // Google sign-up removed per request. Only email sign-up remains.
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

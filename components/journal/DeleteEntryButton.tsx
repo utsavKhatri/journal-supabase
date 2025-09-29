@@ -16,11 +16,21 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+/**
+ * The DeleteEntryButton component provides a button that, when clicked, opens a confirmation dialog
+ * to prevent accidental deletion of a journal entry. Upon confirmation, it deletes the specified
+ * entry from the database.
+ */
 export function DeleteEntryButton({ entryId }: { entryId: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  /**
+   * Handles the deletion of the journal entry.
+   * It sets the loading state, communicates with Supabase to delete the entry,
+   * and then redirects to the homepage and refreshes the page on success.
+   */
   const handleDelete = async () => {
     setIsLoading(true);
     setError(null);

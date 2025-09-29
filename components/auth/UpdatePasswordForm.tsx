@@ -15,6 +15,11 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+/**
+ * The UpdatePasswordForm component provides a form for users to set a new password.
+ * This is typically used after a user has followed a password reset link sent to their email.
+ * It captures the new password, updates it in Supabase, and redirects to the homepage on success.
+ */
 export function UpdatePasswordForm({
   className,
   ...props
@@ -24,7 +29,11 @@ export function UpdatePasswordForm({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleForgotPassword = async (e: React.FormEvent) => {
+  /**
+   * Handles the submission of the update password form.
+   * It updates the user's password in Supabase and redirects to the homepage upon success.
+   */
+  const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
     setIsLoading(true);
@@ -33,7 +42,7 @@ export function UpdatePasswordForm({
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
-      // After password update redirect to root (journal)
+      // After a successful password update, redirect to the main journal page.
       router.push("/");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -52,7 +61,7 @@ export function UpdatePasswordForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleForgotPassword}>
+          <form onSubmit={handleUpdatePassword}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="password">New password</Label>

@@ -15,6 +15,10 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
 
+/**
+ * The LoginForm component provides a form for users to sign in with their email and password.
+ * It handles user input, communicates with Supabase for authentication, and displays any errors.
+ */
 export function LoginForm({
   className,
   ...props
@@ -24,6 +28,11 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  /**
+   * Handles the submission of the login form.
+   * It attempts to sign the user in using Supabase auth with the provided email and password.
+   * On success, it reloads the page to redirect to the main journal.
+   */
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
@@ -36,7 +45,7 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      // On success, navigate to the journal
+      // On success, navigate to the journal page.
       window.location.href = "/";
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -44,8 +53,6 @@ export function LoginForm({
       setIsLoading(false);
     }
   };
-
-  // Google sign-in removed per request. Only email sign-in remains.
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -84,6 +91,12 @@ export function LoginForm({
               </div>
 
               {error && <p className="text-sm text-red-500">{error}</p>}
+              <Link
+                href="/auth/forgot-password"
+                className="text-sm text-primary underline-offset-4 hover:underline text-right"
+              >
+                Forgot password?
+              </Link>
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>

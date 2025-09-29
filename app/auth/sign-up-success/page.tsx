@@ -9,6 +9,11 @@ import { MailCheck } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Renders a success page after a user signs up.
+ * This page informs the user that a confirmation email has been sent and
+ * prompts them to check their inbox to activate their account.
+ */
 export default function Page() {
   return (
     <div className="flex flex-1 w-full items-center justify-center p-6 md:p-10">

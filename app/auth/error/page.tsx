@@ -3,6 +3,11 @@ import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+/**
+ * A page component that displays an authentication error message.
+ * It retrieves the error message from the URL search parameters and presents it
+ * in a user-friendly card format with an option to return to the homepage.
+ */
 export default async function Page({
   searchParams,
 }: {

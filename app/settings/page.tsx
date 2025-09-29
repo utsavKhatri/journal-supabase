@@ -10,7 +10,13 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
+/**
+ * The Settings page provides users with options to manage their account data.
+ * It includes functionality for exporting all journal entries and for deleting the user's account.
+ * This page requires the user to be authenticated.
+ */
 export default async function SettingsPage() {
   const supabase = await createClient();
 
@@ -22,7 +28,8 @@ export default async function SettingsPage() {
   }
 
   return (
-    <section className="flex flex-col gap-8 w-full flex-1">
+    <section className="flex flex-col gap-8 w-full flex-1 max-sm:px-2">
+      {/* Card for exporting user data. */}
       <Card>
         <CardHeader>
           <CardTitle>Export Data</CardTitle>
@@ -30,6 +37,19 @@ export default async function SettingsPage() {
         </CardHeader>
         <CardContent>
           <ExportButtons />
+        </CardContent>
+      </Card>
+
+      {/* Card for deleting the user's account. */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Change Password</CardTitle>
+          <CardDescription>Update your account password.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action="/auth/update-password">
+            <Button type="submit">Change Password</Button>
+          </form>
         </CardContent>
       </Card>
 

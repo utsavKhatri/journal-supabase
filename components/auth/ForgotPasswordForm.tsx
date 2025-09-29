@@ -15,6 +15,10 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
 
+/**
+ * The ForgotPasswordForm component provides a form for users to request a password reset link.
+ * It captures the user's email, sends a reset request to Supabase, and displays success or error messages.
+ */
 export function ForgotPasswordForm({
   className,
   ...props
@@ -24,6 +28,10 @@ export function ForgotPasswordForm({
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  /**
+   * Handles the submission of the forgot password form.
+   * It sends a password reset email to the user-provided address using Supabase auth.
+   */
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
@@ -31,7 +39,7 @@ export function ForgotPasswordForm({
     setError(null);
 
     try {
-      // The url which will be included in the email. This URL needs to be configured in your redirect URLs in the Supabase dashboard at https://supabase.com/dashboard/project/_/auth/url-configuration
+      // The URL included in the email, which should be configured in the Supabase dashboard.
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth/update-password`,
       });
@@ -46,6 +54,7 @@ export function ForgotPasswordForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      {/* If the email has been sent successfully, show a confirmation message. */}
       {success ? (
         <Card>
           <CardHeader>
@@ -60,6 +69,7 @@ export function ForgotPasswordForm({
           </CardContent>
         </Card>
       ) : (
+        // Otherwise, display the forgot password form.
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Forgot Password?</CardTitle>

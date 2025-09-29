@@ -1,6 +1,10 @@
 import React from "react";
 import Link from "next/link";
 
+/**
+ * A component to be displayed when no insights are found.
+ * It provides a user-friendly message and a link to navigate back to the homepage.
+ */
 export default function InsightsNotFound() {
   return (
     <div className="flex flex-1 items-center justify-center p-6">

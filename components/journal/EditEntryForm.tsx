@@ -12,6 +12,11 @@ import {
 import { EntryEditor } from "@/components/journal/EntryEditor";
 import { Entry } from "@/lib/types";
 
+/**
+ * The EditEntryForm component provides a dialog-based form for editing an existing journal entry.
+ * It wraps the `EntryEditor` component in a dialog, passing the entry data to be edited.
+ * The dialog closes automatically upon a successful save.
+ */
 export function EditEntryForm({
   entry,
 }: {
@@ -19,6 +24,9 @@ export function EditEntryForm({
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  /**
+   * Closes the dialog. This function is passed as a callback to the EntryEditor.
+   */
   const handleSave = () => {
     setIsOpen(false);
   };
