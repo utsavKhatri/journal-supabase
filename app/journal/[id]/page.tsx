@@ -54,7 +54,7 @@ export default async function EntryDetailPage({
         </div>
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-2xl">
+            <CardTitle className="flex flex-wrap items-center gap-2 text-2xl text-nowrap max-sm:text-xl">
               {/* Displays the mood and formatted date of the journal entry. */}
               <span>{entry.mood}</span>
               <span>

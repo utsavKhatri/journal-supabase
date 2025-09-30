@@ -46,7 +46,7 @@ export default async function Home(props: HomeProps) {
     <>
       <header
         className={cn(
-          'mb-8 flex w-full items-center gap-4 max-sm:flex-col-reverse max-sm:items-center',
+          'mb-8 flex w-full items-center gap-4 max-sm:flex-col-reverse max-sm:items-center max-sm:px-4',
         )}
       >
         {/* Search form for filtering journal entries by keyword. */}
@@ -69,7 +69,7 @@ export default async function Home(props: HomeProps) {
         <NewEntryForm />
       </header>
 
-      <main className="flex w-full flex-col gap-8">
+      <main className="flex w-full flex-col gap-8 max-sm:px-4">
         {entries && entries.length > 0 ? (
           <>
             {/* Display the journal entries in a responsive, bento-style grid. */}
@@ -87,9 +87,11 @@ export default async function Home(props: HomeProps) {
                   >
                     <CardHeader className="my-3">
                       <CardTitle className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-2xl">{entry.mood}</span>
-                          <span className="truncate text-lg font-semibold">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-2xl text-nowrap">
+                            {entry.mood}
+                          </span>
+                          <span className="truncate text-lg font-semibold text-nowrap">
                             {new Date(entry.date).toLocaleDateString('en-US', {
                               weekday: 'short',
                               day: 'numeric',
@@ -133,7 +135,7 @@ export default async function Home(props: HomeProps) {
           </>
         ) : (
           // Display a prompt to create a new entry if none exist.
-          <div className="mx-auto flex w-full max-w-2xl flex-col items-center justify-center rounded-lg px-2 py-16 text-center">
+          <div className="mx-auto flex w-full max-w-2xl flex-col items-center justify-center rounded-lg px-4 py-16 text-center">
             <div className="mb-4 text-6xl">📝</div>
             <h3 className="mb-2 text-lg font-semibold">No entries yet</h3>
             <p className="text-muted-foreground mb-6 max-w-md">
