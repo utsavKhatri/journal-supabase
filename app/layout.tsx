@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Kalam, Open_Sans } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Header } from '@/components/layout/Header';
+import { ScrollbarProvider } from '@/components/layout/ScrollbarProvider';
 import './globals.css';
 
 const defaultUrl = process.env.VERCEL_URL
@@ -41,20 +42,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${openSans.className} ${kalam.variable} antialiased`}>
-        {/* ThemeProvider handles the application's light and dark modes. */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="relative flex h-full min-h-dvh flex-col">
-            <Header />
-            <main className="flex flex-1 flex-col items-center py-[2rem] sm:container sm:mx-auto">
-              {children}
-            </main>
-          </div>
-        </ThemeProvider>
+        <ScrollbarProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="relative flex h-full min-h-dvh flex-col">
+              <Header />
+              <main className="flex flex-1 flex-col items-center py-[2rem] sm:container sm:mx-auto">
+                {children}
+              </main>
+            </div>
+          </ThemeProvider>
+        </ScrollbarProvider>
       </body>
     </html>
   );

@@ -165,7 +165,7 @@ export function EntryEditor({
                     }
                   }}
                   autoFocus
-                  hidden={{ after: new Date() }} // Disable future dates
+                  disabled={{ after: new Date() }}
                 />
               </PopoverContent>
             </Popover>

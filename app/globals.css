@@ -184,7 +184,7 @@
     @apply outline-none;
   }
 
-  html:not(:has(dialog[data-state='open'], [data-radix-menu-content])) {
+  html.has-scrollbar:not(:has(dialog[data-state='open'], [data-radix-menu-content])) {
     scrollbar-gutter: stable;
   }
 }
