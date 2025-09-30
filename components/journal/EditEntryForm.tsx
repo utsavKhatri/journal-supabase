@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { EntryEditor } from "@/components/journal/EntryEditor";
-import { Entry } from "@/lib/types";
+} from '@/components/ui/dialog';
+import { EntryEditor } from '@/components/journal/EntryEditor';
+import { Entry } from '@/lib/types';
 
 /**
  * The EditEntryForm component provides a dialog-based form for editing an existing journal entry.
@@ -20,7 +20,7 @@ import { Entry } from "@/lib/types";
 export function EditEntryForm({
   entry,
 }: {
-  entry: Pick<Entry, "id" | "date" | "mood" | "content" | "created_at">;
+  entry: Pick<Entry, 'id' | 'date' | 'mood' | 'content' | 'created_at'>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 

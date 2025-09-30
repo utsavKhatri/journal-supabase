@@ -1,4 +1,4 @@
-import { UpdatePasswordForm } from "@/components/auth/UpdatePasswordForm";
+import { UpdatePasswordForm } from '@/components/auth/UpdatePasswordForm';
 
 /**
  * Renders the update password page.
@@ -8,7 +8,7 @@ import { UpdatePasswordForm } from "@/components/auth/UpdatePasswordForm";
  */
 export default function Page() {
   return (
-    <div className="flex flex-1 w-full items-center justify-center p-6 md:p-10">
+    <div className="flex w-full flex-1 items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
         <UpdatePasswordForm />
       </div>

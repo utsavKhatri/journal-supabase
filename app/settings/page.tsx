@@ -1,16 +1,16 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
 
-import { ExportButtons } from "@/components/setting/ExportButton";
-import { DeleteAccountButton } from "@/components/setting/DeleteAccountButton";
+import { ExportButtons } from '@/components/setting/ExportButton';
+import { DeleteAccountButton } from '@/components/setting/DeleteAccountButton';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 /**
  * The Settings page provides users with options to manage their account data.
@@ -24,11 +24,11 @@ export default async function SettingsPage() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    redirect("/auth/login");
+    redirect('/auth/login');
   }
 
   return (
-    <section className="flex flex-col gap-8 w-full flex-1 max-sm:px-2">
+    <section className="flex w-full flex-1 flex-col gap-8 max-sm:px-2">
       {/* Card for exporting user data. */}
       <Card>
         <CardHeader>

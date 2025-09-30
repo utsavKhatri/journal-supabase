@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import { createClient } from "@/lib/supabase/client";
-import { User } from "@supabase/supabase-js";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Button } from '../ui/button';
+import { createClient } from '@/lib/supabase/client';
+import { User } from '@supabase/supabase-js';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +12,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 /**
  * The AuthButton component handles the display of authentication-related actions.
@@ -54,7 +54,7 @@ export function AuthButton() {
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/auth/login");
+    router.push('/auth/login');
     router.refresh();
   };
 
@@ -62,7 +62,7 @@ export function AuthButton() {
    * Generates initials from the user's email to be used as a fallback for the avatar.
    */
   const getInitials = (email: string) => {
-    return email ? email.slice(0, 2).toUpperCase() : "?";
+    return email ? email.slice(0, 2).toUpperCase() : '?';
   };
 
   return user ? (
@@ -73,15 +73,15 @@ export function AuthButton() {
           <Avatar className="h-8 w-8">
             <AvatarImage
               src={user.user_metadata.avatar_url}
-              alt={user.email ?? ""}
+              alt={user.email ?? ''}
             />
-            <AvatarFallback>{getInitials(user.email ?? "")}</AvatarFallback>
+            <AvatarFallback>{getInitials(user.email ?? '')}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
-          <div className="text-xs leading-none text-muted-foreground">
+          <div className="text-muted-foreground text-xs leading-none">
             {user.email}
           </div>
         </DropdownMenuLabel>
@@ -95,10 +95,10 @@ export function AuthButton() {
   ) : (
     // If the user is not authenticated, display sign-in and sign-up buttons.
     <div className="flex gap-2">
-      <Button asChild size="sm" variant={"outline"}>
+      <Button asChild size="sm" variant={'outline'}>
         <Link href="/auth/login">Sign in</Link>
       </Button>
-      <Button asChild size="sm" variant={"default"}>
+      <Button asChild size="sm" variant={'default'}>
         <Link href="/auth/sign-up">Sign up</Link>
       </Button>
     </div>

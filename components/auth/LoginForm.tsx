@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
+import { cn } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/client';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useState } from "react";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Link from 'next/link';
+import { useState } from 'react';
 
 /**
  * The LoginForm component provides a form for users to sign in with their email and password.
@@ -22,9 +22,9 @@ import { useState } from "react";
 export function LoginForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+}: React.ComponentPropsWithoutRef<'div'>) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,16 +46,16 @@ export function LoginForm({
       });
       if (error) throw error;
       // On success, navigate to the journal page.
-      window.location.href = "/";
+      window.location.href = '/';
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : 'An error occurred');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Welcome Back!</CardTitle>
@@ -93,17 +93,17 @@ export function LoginForm({
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Link
                 href="/auth/forgot-password"
-                className="text-sm text-primary underline-offset-4 hover:underline text-right"
+                className="text-primary text-right text-sm underline-offset-4 hover:underline"
               >
                 Forgot password?
               </Link>
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign in"}
+                {isLoading ? 'Signing in...' : 'Sign in'}
               </Button>
             </div>
           </form>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?{' '}
             <Link href="/auth/sign-up" className="underline underline-offset-4">
               Sign up
             </Link>

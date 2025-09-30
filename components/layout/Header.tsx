@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { AuthButton } from "@/components/auth/AuthButton";
-import { ThemeToggle } from "./ThemeToggle";
-import { ChevronRight, Menu, X } from "lucide-react";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { AuthButton } from '@/components/auth/AuthButton';
+import { ThemeToggle } from './ThemeToggle';
+import { ChevronRight, Menu, X } from 'lucide-react';
 
 /**
  * The Header component serves as the main navigation bar for the application.
@@ -17,34 +17,34 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // Do not render the header on authentication pages.
-  if (pathname?.startsWith("/auth")) return null;
+  if (pathname?.startsWith('/auth')) return null;
 
   const navItems = [
-    { href: "/", label: "Journal" },
-    { href: "/insights", label: "Insights" },
-    { href: "/settings", label: "Settings" },
+    { href: '/', label: 'Journal' },
+    { href: '/insights', label: 'Insights' },
+    { href: '/settings', label: 'Settings' },
   ];
 
   const currentPageLabel = navItems.find(
-    (item) => item.href === pathname
+    (item) => item.href === pathname,
   )?.label;
 
   return (
-    <header className="w-full sticky top-4 z-40">
+    <header className="sticky top-4 z-40 w-full">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between rounded-full bg-background/70 backdrop-blur-md border border-border/50 shadow px-6">
+        <div className="bg-background/70 border-border/50 flex h-16 items-center justify-between rounded-full border px-6 shadow backdrop-blur-md">
           {/* Logo and breadcrumb section */}
-          <div className="flex items-center space-x-3 min-w-0 flex-1 ">
+          <div className="flex min-w-0 flex-1 items-center space-x-3">
             <Link
               href="/"
-              className="text-lg font-bold text-foreground hover:text-primary transition-colors duration-300"
+              className="text-foreground hover:text-primary text-lg font-bold transition-colors duration-300"
             >
               Mindful Moments
             </Link>
 
             {/* Breadcrumb for current page */}
-            {pathname !== "/" && currentPageLabel && (
-              <div className="hidden sm:flex items-center space-x-2 text-muted-foreground">
+            {pathname !== '/' && currentPageLabel && (
+              <div className="text-muted-foreground hidden items-center space-x-2 sm:flex">
                 <ChevronRight size={14} />
                 <span className="text-sm">{currentPageLabel}</span>
               </div>
@@ -52,17 +52,17 @@ export function Header() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden lg:flex items-center gap-2 mr-4">
+          <div className="mr-4 hidden items-center gap-2 lg:flex">
             <nav className="flex items-center space-x-1 text-sm font-medium">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "px-4 py-2 rounded-full transition-colors",
+                    'rounded-full px-4 py-2 transition-colors',
                     pathname === item.href
-                      ? "bg-primary/10 text-foreground font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-background/40"
+                      ? 'bg-primary/10 text-foreground font-semibold'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-background/40',
                   )}
                 >
                   {item.label}
@@ -74,7 +74,7 @@ export function Header() {
           {/* Actions section */}
           <div className="flex items-center gap-2">
             {/* Theme toggle and auth - desktop only */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden items-center gap-3 md:flex">
               <ThemeToggle />
               <AuthButton />
             </div>
@@ -83,13 +83,13 @@ export function Header() {
             <div className="lg:hidden">
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="p-2 rounded-full hover:bg-background/40 transition-colors"
-                aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                className="hover:bg-background/40 rounded-full p-2 transition-colors"
+                aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               >
                 {mobileOpen ? (
-                  <X className="w-5 h-5" />
+                  <X className="h-5 w-5" />
                 ) : (
-                  <Menu className="w-5 h-5" />
+                  <Menu className="h-5 w-5" />
                 )}
               </button>
             </div>
@@ -99,8 +99,8 @@ export function Header() {
 
       {/* Mobile navigation menu */}
       {mobileOpen && (
-        <div className="lg:hidden mt-2 container mx-auto px-4 absolute left-0 right-0">
-          <nav className="flex flex-col rounded-2xl bg-background/80 backdrop-blur-md border border-border/50 shadow p-2 space-y-2">
+        <div className="absolute right-0 left-0 container mx-auto mt-2 px-4 lg:hidden">
+          <nav className="bg-background/80 border-border/50 flex flex-col space-y-2 rounded-2xl border p-2 shadow backdrop-blur-md">
             {/* Navigation items */}
             {navItems.map((item) => (
               <Link
@@ -108,10 +108,10 @@ export function Header() {
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
-                  "px-3 py-2 rounded-lg transition-colors text-base",
+                  'rounded-lg px-3 py-2 text-base transition-colors',
                   pathname === item.href
-                    ? "bg-primary/10 text-foreground font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-background/40"
+                    ? 'bg-primary/10 text-foreground font-semibold'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-background/40',
                 )}
               >
                 {item.label}
@@ -119,7 +119,7 @@ export function Header() {
             ))}
 
             {/* Settings section */}
-            <div className="border-t border-border/50 pt-3 space-y-3 flex justify-between items-center px-4">
+            <div className="border-border/50 flex items-center justify-between space-y-3 border-t px-4 pt-3">
               <ThemeToggle />
 
               <AuthButton />

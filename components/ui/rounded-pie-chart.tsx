@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { LabelList, Pie, PieChart, Cell } from "recharts";
+import { LabelList, Pie, PieChart, Cell } from 'recharts';
 
 import {
   Card,
@@ -8,49 +8,49 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { Badge } from "@/components/ui/badge";
-import { TrendingUp } from "lucide-react";
+} from '@/components/ui/chart';
+import { Badge } from '@/components/ui/badge';
+import { TrendingUp } from 'lucide-react';
 
-export const description = "A pie chart with a label list";
+export const description = 'A pie chart with a label list';
 
 const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
+  { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
+  { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
+  { browser: 'firefox', visitors: 187, fill: 'var(--color-firefox)' },
+  { browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
+  { browser: 'other', visitors: 90, fill: 'var(--color-other)' },
 ];
 
 const chartConfig = {
   visitors: {
-    label: "Visitors",
+    label: 'Visitors',
   },
   chrome: {
-    label: "Chrome",
-    color: "var(--chart-1)",
+    label: 'Chrome',
+    color: 'var(--chart-1)',
   },
   safari: {
-    label: "Safari",
-    color: "var(--chart-2)",
+    label: 'Safari',
+    color: 'var(--chart-2)',
   },
   firefox: {
-    label: "Firefox",
-    color: "var(--chart-3)",
+    label: 'Firefox',
+    color: 'var(--chart-3)',
   },
   edge: {
-    label: "Edge",
-    color: "var(--chart-4)",
+    label: 'Edge',
+    color: 'var(--chart-4)',
   },
   other: {
-    label: "Other",
-    color: "var(--chart-5)",
+    label: 'Other',
+    color: 'var(--chart-5)',
   },
 } satisfies ChartConfig;
 
@@ -68,26 +68,26 @@ type RoundedPieChartProps = {
 
 export function RoundedPieChart({
   data = chartData,
-  dataKey = "visitors",
+  dataKey = 'visitors',
   title = (
     <>
       Pie Chart
       <Badge
         variant="outline"
-        className="text-green-500 bg-green-500/10 border-none ml-2"
+        className="ml-2 border-none bg-green-500/10 text-green-500"
       >
         <TrendingUp className="h-4 w-4" />
         <span>5.2%</span>
       </Badge>
     </>
   ),
-  subtitle = "January - June 2024",
+  subtitle = 'January - June 2024',
   config = chartConfig,
   className,
   badgeContent,
 }: RoundedPieChartProps) {
   return (
-    <Card className="flex flex-col relative">
+    <Card className="relative flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>{title}</CardTitle>
         {subtitle && <CardDescription>{subtitle}</CardDescription>}
@@ -97,7 +97,7 @@ export function RoundedPieChart({
           config={config}
           className={
             className ??
-            "[&_.recharts-text]:fill-background mx-auto aspect-square max-h-[250px]"
+            '[&_.recharts-text]:fill-background mx-auto aspect-square max-h-[250px]'
           }
         >
           <PieChart>

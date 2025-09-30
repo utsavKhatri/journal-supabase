@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { EntryEditor } from "@/components/journal/EntryEditor";
-import { PlusIcon } from "lucide-react";
+} from '@/components/ui/dialog';
+import { EntryEditor } from '@/components/journal/EntryEditor';
+import { PlusIcon } from 'lucide-react';
 
 /**
  * The NewEntryForm component provides a dialog-based form for creating a new journal entry.

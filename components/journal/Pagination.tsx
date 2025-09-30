@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PaginationProps {
   totalPages: number;
@@ -24,7 +24,7 @@ export function Pagination({ totalPages, currentPage = 1 }: PaginationProps) {
    */
   const createPageURL = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     return `?${params.toString()}`;
   };
 
@@ -44,7 +44,7 @@ export function Pagination({ totalPages, currentPage = 1 }: PaginationProps) {
    * and its immediate neighbors visible.
    */
   const getPageNumbers = () => {
-    const pages: (number | "ellipsis")[] = [];
+    const pages: (number | 'ellipsis')[] = [];
     const showEllipsis = totalPages > 7;
 
     if (!showEllipsis) {
@@ -62,21 +62,21 @@ export function Pagination({ totalPages, currentPage = 1 }: PaginationProps) {
           pages.push(i);
         }
         if (totalPages > 5) {
-          pages.push("ellipsis");
+          pages.push('ellipsis');
         }
       } else if (currentPage >= totalPages - 3) {
         // Show an ellipsis and the last 4 pages if near the end.
-        pages.push("ellipsis");
+        pages.push('ellipsis');
         for (let i = Math.max(2, totalPages - 4); i <= totalPages - 1; i++) {
           pages.push(i);
         }
       } else {
         // Show an ellipsis, the current page and its neighbors, and another ellipsis for middle pages.
-        pages.push("ellipsis");
+        pages.push('ellipsis');
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pages.push(i);
         }
-        pages.push("ellipsis");
+        pages.push('ellipsis');
       }
 
       // Always show the last page if it's not already included.
@@ -106,7 +106,7 @@ export function Pagination({ totalPages, currentPage = 1 }: PaginationProps) {
         </Button>
 
         {pageNumbers.map((page, index) =>
-          page === "ellipsis" ? (
+          page === 'ellipsis' ? (
             <div
               key={`ellipsis-${index}`}
               className="flex h-9 w-9 items-center justify-center"
@@ -116,17 +116,17 @@ export function Pagination({ totalPages, currentPage = 1 }: PaginationProps) {
           ) : (
             <Button
               key={page}
-              variant={currentPage === page ? "default" : "outline"}
+              variant={currentPage === page ? 'default' : 'outline'}
               size="sm"
               onClick={() => goToPage(page)}
               className={cn(
-                "h-9 w-9 p-0",
-                currentPage === page && "bg-primary text-primary-foreground"
+                'h-9 w-9 p-0',
+                currentPage === page && 'bg-primary text-primary-foreground',
               )}
             >
               {page}
             </Button>
-          )
+          ),
         )}
 
         <Button

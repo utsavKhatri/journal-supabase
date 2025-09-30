@@ -1,5 +1,5 @@
-import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -16,17 +16,17 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
+            request.cookies.set(name, value),
           );
           supabaseResponse = NextResponse.next({
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, options),
           );
         },
       },
-    }
+    },
   );
 
   let user = null;
@@ -40,18 +40,39 @@ export async function updateSession(request: NextRequest) {
     // If fetch fails (network issue, Supabase down, etc.) we should not crash
     // the middleware — return the existing response so the request can continue.
     // Log the error for observability.
-    console.error("Supabase middleware: auth.getUser() failed:", err);
+    console.error('Supabase middleware: auth.getUser() failed:', err);
     return supabaseResponse;
+  }
+
+  const publicPaths = [
+    '/auth/login',
+    '/auth/sign-up',
+    '/auth/forgot-password',
+    '/auth/sign-up-success',
+    '/auth/error',
+    '/auth/confirm',
+  ];
+  const isPublicPath = publicPaths.includes(request.nextUrl.pathname);
+
+  // if user is signed in and trying to access a public path (excluding update-password), redirect to home
+  if (
+    user &&
+    isPublicPath &&
+    request.nextUrl.pathname !== '/auth/update-password'
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/';
+    return NextResponse.redirect(url);
   }
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/error")
+    !request.nextUrl.pathname.startsWith('/auth') &&
+    !request.nextUrl.pathname.startsWith('/error')
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
+    url.pathname = '/auth/login';
     return NextResponse.redirect(url);
   }
 

@@ -1,5 +1,5 @@
-import React from "react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 
 /**
  * A component to be displayed when a specific journal entry is not found.
@@ -10,7 +10,7 @@ export default function JournalEntryNotFound() {
     <div className="flex flex-1 items-center justify-center p-6">
       <div className="text-center">
         <h1 className="text-2xl font-semibold">Entry not found</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-sm">
           We couldn&#39;t find this journal entry.
         </p>
         <div className="mt-4">

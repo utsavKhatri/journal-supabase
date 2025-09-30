@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { RoundedPieChart } from "@/components/ui/rounded-pie-chart";
-import { Entry } from "@/lib/types";
+import { RoundedPieChart } from '@/components/ui/rounded-pie-chart';
+import { Entry } from '@/lib/types';
 
 /**
  * The MoodChart component visualizes the distribution of moods from journal entries.
@@ -12,13 +12,13 @@ export function MoodChart({
   entries,
   badgeContent,
 }: {
-  entries: Pick<Entry, "mood">[];
+  entries: Pick<Entry, 'mood'>[];
   badgeContent?: React.ReactNode;
 }) {
   // Reduces the entries to a collection of moods and their counts.
   const moodData = entries.reduce(
-    (acc: { name: string; value: number }[], entry: Pick<Entry, "mood">) => {
-      const mood = entry.mood || "Unknown";
+    (acc: { name: string; value: number }[], entry: Pick<Entry, 'mood'>) => {
+      const mood = entry.mood || 'Unknown';
       const existingMood = acc.find((item) => item.name === mood);
       if (existingMood) {
         existingMood.value += 1;
@@ -27,7 +27,7 @@ export function MoodChart({
       }
       return acc;
     },
-    [] as { name: string; value: number }[]
+    [] as { name: string; value: number }[],
   );
 
   // Maps the processed mood data to the format expected by the pie chart component.

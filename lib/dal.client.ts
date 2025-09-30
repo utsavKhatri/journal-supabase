@@ -2,14 +2,14 @@
  * This file contains the data access layer for the application.
  * It provides functions to interact with the Supabase database for client-side operations.
  */
-import { createClient } from "@/lib/supabase/client";
-import { Entry } from "@/lib/types";
+import { createClient } from '@/lib/supabase/client';
+import { Entry } from '@/lib/types';
 
 type SaveEntryPayload = {
   content: string;
   mood: string | null;
   date: Date | undefined;
-  entry?: Pick<Entry, "id">;
+  entry?: Pick<Entry, 'id'>;
   userId: string;
 };
 
@@ -24,23 +24,25 @@ export const saveEntry = async (payload: SaveEntryPayload) => {
   if (entry) {
     // Update existing entry
     const { data, error } = await supabase
-      .from("entries")
+      .from('entries')
       .update({
         content,
         mood,
         date: date?.toISOString(),
         updated_at: new Date().toISOString(),
       })
-      .eq("id", entry.id)
+      .eq('id', entry.id)
       .select();
 
     if (error) throw error;
     if (!data || data.length === 0) {
-      throw new Error("Failed to update entry. Entry not found or no permissions.");
+      throw new Error(
+        'Failed to update entry. Entry not found or no permissions.',
+      );
     }
   } else {
     // Create new entry
-    const { error } = await supabase.from("entries").insert({
+    const { error } = await supabase.from('entries').insert({
       content,
       mood,
       date: date?.toISOString(),
@@ -61,10 +63,10 @@ export const getEntriesForExport = async () => {
 
   if (user) {
     const { data: entries, error } = await supabase
-      .from("entries")
-      .select("date, mood, content")
-      .eq("user_id", user.id)
-      .order("date", { ascending: false });
+      .from('entries')
+      .select('date, mood, content')
+      .eq('user_id', user.id)
+      .order('date', { ascending: false });
 
     if (error) throw error;
     return entries;

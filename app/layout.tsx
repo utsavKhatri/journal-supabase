@@ -1,30 +1,30 @@
-import type { Metadata } from "next";
-import { Kalam, Open_Sans } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import { Header } from "@/components/layout/Header";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Kalam, Open_Sans } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
+import { Header } from '@/components/layout/Header';
+import './globals.css';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+  : 'http://localhost:3000';
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Mindful Moments",
-  description: "A gratitude journaling app built with Next.js and Supabase.",
+  title: 'Mindful Moments',
+  description: 'A gratitude journaling app built with Next.js and Supabase.',
 };
 
 // Initializes the Kalam font for use throughout the application.
 const openSans = Open_Sans({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: "400",
+  variable: '--font-sans',
+  subsets: ['latin'],
+  weight: '400',
 });
 
 const kalam = Kalam({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
+  variable: '--font-display',
+  subsets: ['latin'],
+  weight: ['300', '400', '700'],
 });
 
 /**
@@ -48,9 +48,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col h-full min-h-dvh relative">
+          <div className="relative flex h-full min-h-dvh flex-col">
             <Header />
-            <main className="sm:mx-auto sm:container flex-1 flex flex-col items-center py-[2rem]">
+            <main className="flex flex-1 flex-col items-center py-[2rem] sm:container sm:mx-auto">
               {children}
             </main>
           </div>

@@ -1,41 +1,41 @@
-"use client";
+'use client';
 
-import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, XAxis } from "recharts";
+import { TrendingUp } from 'lucide-react';
+import { Bar, BarChart, XAxis } from 'recharts';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/chart';
+import { Badge } from '@/components/ui/badge';
 
 const chartData = [
-  { month: "January", desktop: 342 },
-  { month: "February", desktop: 876 },
-  { month: "March", desktop: 512 },
-  { month: "April", desktop: 629 },
-  { month: "May", desktop: 458 },
-  { month: "June", desktop: 781 },
-  { month: "July", desktop: 394 },
-  { month: "August", desktop: 925 },
-  { month: "September", desktop: 647 },
-  { month: "October", desktop: 532 },
-  { month: "November", desktop: 803 },
-  { month: "December", desktop: 271 },
+  { month: 'January', desktop: 342 },
+  { month: 'February', desktop: 876 },
+  { month: 'March', desktop: 512 },
+  { month: 'April', desktop: 629 },
+  { month: 'May', desktop: 458 },
+  { month: 'June', desktop: 781 },
+  { month: 'July', desktop: 394 },
+  { month: 'August', desktop: 925 },
+  { month: 'September', desktop: 647 },
+  { month: 'October', desktop: 532 },
+  { month: 'November', desktop: 803 },
+  { month: 'December', desktop: 271 },
 ];
 
 const defaultChartConfig = {
   desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
+    label: 'Desktop',
+    color: 'var(--chart-1)',
   },
 } satisfies ChartConfig;
 
@@ -52,21 +52,21 @@ type GradientBarChartProps = {
 
 export function GradientBarChart({
   data = chartData,
-  dataKey = "desktop",
-  xKey = "month",
+  dataKey = 'desktop',
+  xKey = 'month',
   title = (
     <>
       Bar Chart
       <Badge
         variant="outline"
-        className="text-green-500 bg-green-500/10 border-none ml-2"
+        className="ml-2 border-none bg-green-500/10 text-green-500"
       >
         <TrendingUp className="h-4 w-4" />
         <span>5.2%</span>
       </Badge>
     </>
   ),
-  subtitle = "January - June 2025",
+  subtitle = 'January - June 2025',
   config = defaultChartConfig,
 }: GradientBarChartProps) {
   // The ChartContainer expects a ChartConfig mapping; we rely on the caller to
@@ -114,7 +114,7 @@ interface CustomBarProps {
 
 const CustomGradientBar = (props: CustomBarProps) => {
   const {
-    fill = "var(--chart-1)",
+    fill = 'var(--chart-1)',
     x = 0,
     y = 0,
     width = 0,

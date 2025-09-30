@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 /**
  * A client-side error boundary component for Next.js applications.
@@ -10,11 +10,11 @@ import { Button } from "@/components/ui/button";
  */
 export default function Error({ reset }: { reset: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center flex-1">
-      <h2 className="text-2xl font-semibold text-red-600 dark:text-red-400 mb-4">
+    <div className="flex flex-1 flex-col items-center justify-center">
+      <h2 className="mb-4 text-2xl font-semibold text-red-600 dark:text-red-400">
         Something went wrong!
       </h2>
-      <Button onClick={() => reset()} variant={"destructive"}>
+      <Button onClick={() => reset()} variant={'destructive'}>
         Try again
       </Button>
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 /**
  * Displays a loading indicator for the main journal page.

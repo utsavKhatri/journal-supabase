@@ -1,7 +1,7 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { bentoPatterns, patternSets } from "./constants";
-import { Entry } from "./types";
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import { bentoPatterns, patternSets } from './constants';
+import { Entry } from './types';
 
 /**
  * Merge arbitrary class values into a single className string.
@@ -30,7 +30,7 @@ export function cn(...inputs: ClassValue[]) {
  * parsing `YYYY-MM-DD` with the Date constructor/Date.parse (which treats it as UTC in some engines).
  */
 export function toLocalDateOnly(value: string | Date): Date {
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     const m = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
     if (m) {
       const y = Number(m[1]);
@@ -60,36 +60,29 @@ export function toKeyFromLocalDate(d: Date) {
  * Then it selects the pattern index from that set using `index % pattern.length` and returns the
  * corresponding entry from `bentoPatterns`.
  */
-export const getBentoPattern = (index: number, totalItems: number) => {
-  const setIndex = Math.floor(totalItems / 12) % patternSets.length;
+export const getBentoPattern = (index: number) => {
+  const setIndex = Math.floor(index / 7) % patternSets.length;
   const pattern = patternSets[setIndex];
   const patternIndex = pattern[index % pattern.length];
   return bentoPatterns[patternIndex];
 };
-
 /**
  * Return an appropriate Tailwind `line-clamp-{n}` utility class for a layout pattern string.
  *
  * The function checks for particular grid span combinations (e.g. `row-span-3`, `col-span-3`)
  * and maps them to a sensible clamp value to control how many lines of text to show.
- *
- * @param pattern - a string containing Tailwind grid classes for a single card (e.g. "col-span-2 row-span-3")
- * @returns a Tailwind `line-clamp-*` utility class
  */
 export const getTextClamp = (pattern: string) => {
-  if (pattern.includes("row-span-3")) return "line-clamp-5";
-  if (pattern.includes("col-span-3") && pattern.includes("row-span-2"))
-    return "line-clamp-4";
-  if (pattern.includes("col-span-2") && pattern.includes("row-span-2"))
-    return "line-clamp-3";
-  if (pattern.includes("row-span-2")) return "line-clamp-4";
-  if (pattern.includes("col-span-3")) return "line-clamp-3";
-  return "line-clamp-1";
+  if (pattern.includes('row-span-2')) return 'line-clamp-4';
+  if (pattern.includes('col-span-2')) return 'line-clamp-2';
+  return 'line-clamp-1';
 };
 
-export const processCalendarEntries = (entries: Pick<Entry, "id" | "date">[]) => {
+export const processCalendarEntries = (
+  entries: Pick<Entry, 'id' | 'date'>[],
+) => {
   const counts = new Map<string, number>();
-  const map = new Map<string, string>();
+  const map = new Map<string, Pick<Entry, 'id' | 'date'>[]>();
 
   // Process each entry to count entries per day and map dates to entry IDs.
   entries.forEach((entry) => {
@@ -99,10 +92,10 @@ export const processCalendarEntries = (entries: Pick<Entry, "id" | "date">[]) =>
 
     counts.set(dateKey, count + 1);
 
-    // Store the first entry ID for a given day to enable navigation.
-    if (!map.has(dateKey)) {
-      map.set(dateKey, entry.id);
-    }
+    // Store all entries for a given day
+    const dayEntries = map.get(dateKey) || [];
+    dayEntries.push(entry);
+    map.set(dateKey, dayEntries);
   });
 
   const max = Math.max(0, ...Array.from(counts.values()));
@@ -126,7 +119,7 @@ export const processCalendarEntries = (entries: Pick<Entry, "id" | "date">[]) =>
   };
 
   counts.forEach((count, dateKey) => {
-    const [yearStr, monthStr, dayStr] = dateKey.split("-");
+    const [yearStr, monthStr, dayStr] = dateKey.split('-');
     const date = new Date(
       parseInt(yearStr, 10),
       parseInt(monthStr, 10),
